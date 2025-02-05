@@ -1,22 +1,19 @@
 from datetime import datetime
 from app.pre_require import db
 
-class User(db.Model):
-    __tablename__ = 'users'
+class Conversations(db.Model):
+    __tablename__="conversations"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(500), unique=True, nullable=False)
-    email = db.Column(db.String(500), unique=True, nullable=False)
-    password = db.Column(db.String(500), nullable=False)
-    first_name = db.Column(db.String(500), nullable=False)
-    last_name = db.Column(db.String(500), nullable=False)
-    contact = db.Column(db.String(500), nullable=False)
+    summary = db.Column(db.String, nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     deleted_at = db.Column(db.DateTime, nullable=True)
-    conversations = db.relationship('Conversations', backref='users', lazy=True)
+    user = db.relationship('User')
+    chat_ref = db.relationship('Chats', backref='conversation_instance', lazy=True)
 
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f'<Conversations {self.username}>'
 
     def soft_delete(self):
         """Marks the user as deleted by setting the deleted_at timestamp."""

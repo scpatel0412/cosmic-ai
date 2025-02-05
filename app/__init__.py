@@ -7,7 +7,7 @@ import os
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from app.routes import user_bp
+from app.routes import user_bp, conversations_bp, chats_bp
 from app.pre_require import db
 
 load_dotenv()
@@ -56,5 +56,7 @@ def create_app():
 
 
     app.register_blueprint(user_bp,url_prefix='/api/v1')
+    app.register_blueprint(conversations_bp,url_prefix='/api/v1')
+    app.register_blueprint(chats_bp,url_prefix='/api/v1')
 
     return app

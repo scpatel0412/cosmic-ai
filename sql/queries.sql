@@ -13,3 +13,24 @@ CREATE TABLE users (
         deleted_at IS NULL OR deleted_at >= created_at
     ) 
 );
+
+CREATE TABLE conversations (
+    id SERIAL PRIMARY KEY, 
+    summary VARCHAR NOT NULL,  
+    user_id INTEGER NOT NULL, 
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,  
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+    deleted_at TIMESTAMP, 
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE chats (
+    id SERIAL PRIMARY KEY,
+    questions TEXT NOT NULL,
+    answer TEXT,
+    conversations_id INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP,
+    FOREIGN KEY (conversations_id) REFERENCES conversations(id) ON DELETE CASCADE
+);
