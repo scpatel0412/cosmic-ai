@@ -52,7 +52,22 @@ def create_app():
     @app.route('/')
     def home():
         print("Home route accessed")
-        return jsonify({"message": "Welcome","status":200,"error":False}), 200
+        return render_template('index.html')
+    
+    @app.route('/contact')
+    def contact():
+        print("Home route accessed")
+        return render_template('contact.html')
+    
+    @app.route('/properties')
+    def properties():
+        print("Home route accessed")
+        return render_template('properties.html')
+    
+    @app.route('/property-details')
+    def properties_details():
+        print("Home route accessed")
+        return render_template('property-details.html')
 
 
     app.register_blueprint(user_bp,url_prefix='/api/v1')

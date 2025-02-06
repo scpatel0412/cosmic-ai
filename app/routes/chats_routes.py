@@ -36,3 +36,44 @@ def create_chat():
     
     
 
+@chats_bp.route('/chats/<int:chat_id>', methods=['GET'])
+@jwt_required()
+def get_chat_with_conversation(chat_id):
+    try:
+        user_id = get_jwt_identity()
+        
+        # Fetch the chat by ID
+        chat = Chats.query.filter_by(id=chat_id).first()
+        
+        if not chat:
+            return jsonify({'message': "No chat found"}), 404
+        
+        # Fetch the associated conversation for this chat
+        conversation = Conversations.query.filter_by(id=chat.conversations_id).first()
+        
+        if not conversation:
+            return jsonify({'message': "No conversation found for this chat"}), 404
+        
+        # Prepare the response data
+        
+
+        conversation_data = {
+            'id': conversation.id,
+            'summary': conversation.summary,
+            'user_id':conversation.user_id,
+            'created_at': conversation.created_at
+        }
+
+        chat_data = {
+            'question': chat.questions,
+            'answer': chat.answer,
+            'created_at': chat.created_at,
+            'id':chat.id,
+            "conversation":conversation_data
+        }
+
+        # Return the chat and its associated conversation details
+        return jsonify(chat_data), 200
+        
+    except Exception as e:
+        return jsonify({"message": "An error occurred", "info": str(e)}), 500
