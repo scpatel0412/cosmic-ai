@@ -1,0 +1,667 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "CosmicAI API",
+    "version": "1.0.0",
+    "description": "CosmicAI API documentation"
+  },
+  "basePath": "/api/v1",
+  "paths": {
+    "/greet": {
+      "get": {
+        "summary": "Greet User",
+        "description": "Greet User",
+        "tags": ["Default"],
+        "responses": {
+          "200": {
+            "description": "Greet User",
+            "schema": {
+              "type": "object",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "User ID"
+                  },
+                  "username": {
+                    "type": "string",
+                    "description": "User's username"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get all users",
+        "description": "Returns a list of all users.",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "schema": {
+              "type": "array",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Greet User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "description": "Creates a new user with the provided data.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "first_name": {
+                  "type": "string"
+                },
+                "last_name": {
+                  "type": "string"
+                },
+                "contact": {
+                  "type": "string"
+                }
+              },
+              "required": ["username", "email"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "User ID"
+                },
+                "username": {
+                  "type": "string",
+                  "description": "User's username"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "summary": "Get user by ID",
+        "description": "Returns a user by their ID.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "User ID"
+                },
+                "username": {
+                  "type": "string",
+                  "description": "User's username"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User's email"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user by ID",
+        "description": "Updates the user with the provided ID.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "User ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Updated user data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "first_name": {
+                  "type": "string"
+                },
+                "last_name": {
+                  "type": "string"
+                },
+                "contact": {
+                  "type": "string"
+                }
+              },
+              "required": ["username", "email"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "User ID"
+                },
+                "username": {
+                  "type": "string",
+                  "description": "User's username"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User's email"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login a user",
+        "description": "Authenticate user and return JWT token.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User login data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": ["email", "password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "access_token": {
+                  "type": "string",
+                  "description": "JWT access token"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Login unsuccessful"
+          }
+        }
+      }
+    },
+    "/users/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Registers a new user and stores their data.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "New user registration data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "first_name": {
+                  "type": "string"
+                },
+                "last_name": {
+                  "type": "string"
+                },
+                "contact": {
+                  "type": "string"
+                }
+              },
+              "required": ["username", "password", "email"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "User already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/conversations/create": {
+      "post": {
+        "summary": "Create a new conversation",
+        "description": "Creates a new conversation with the authenticated user as the owner.",
+        "tags": ["Conversations"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Conversation data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "summary": {
+                  "type": "string",
+                  "description": "A brief summary of the conversation"
+                }
+              },
+              "required": ["summary"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Conversation created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "The ID of the created conversation"
+                },
+                "summary": {
+                  "type": "string",
+                  "description": "The summary of the conversation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/conversations/{id}": {
+      "get": {
+        "summary": "Get a conversation by ID",
+        "description": "Fetch a conversation and its associated chats by the conversation ID.",
+        "tags": ["Conversations"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "The ID of the conversation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversation found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "The ID of the conversation"
+                },
+                "summary": {
+                  "type": "string",
+                  "description": "The summary of the conversation"
+                },
+                "user_id": {
+                  "type": "integer",
+                  "description": "The ID of the user who created the conversation"
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Timestamp of when the conversation was created"
+                },
+                "updated_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Timestamp of the last update to the conversation"
+                },
+                "deleted_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Timestamp of when the conversation was deleted (if applicable)"
+                },
+                "chats": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "description": "The ID of the chat"
+                      },
+                      "questions": {
+                        "type": "string",
+                        "description": "The questions from the chat"
+                      },
+                      "answer": {
+                        "type": "string",
+                        "description": "The answer from the chat"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp of when the chat was created"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp of when the chat was last updated"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Conversation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/chats/create": {
+      "post": {
+        "summary": "Create a new chat",
+        "description": "Creates a new chat by adding a question to an existing conversation.",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "The question and conversation ID to create a new chat",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "conv_id": {
+                  "type": "integer",
+                  "description": "The ID of the conversation"
+                },
+                "question": {
+                  "type": "string",
+                  "description": "The question to be asked"
+                }
+              },
+              "required": ["conv_id", "question"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully created a new chat",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "The answer to the question"
+                },
+                "question": {
+                  "type": "string",
+                  "description": "The question that was asked"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Conversation not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error or failure during database operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message"
+                },
+                "info": {
+                  "type": "string",
+                  "description": "Detailed error information"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chats/{chat_id}": {
+      "get": {
+        "summary": "Get a chat by its ID",
+        "description": "Fetches a chat by its ID along with the associated conversation.",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "chat_id",
+            "in": "path",
+            "description": "The ID of the chat",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully fetched the chat and its associated conversation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Chat ID"
+                },
+                "question": {
+                  "type": "string",
+                  "description": "The question asked"
+                },
+                "answer": {
+                  "type": "string",
+                  "description": "The answer provided"
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The date and time when the chat was created"
+                },
+                "conversation": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "Conversation ID"
+                    },
+                    "summary": {
+                      "type": "string",
+                      "description": "Summary of the conversation"
+                    },
+                    "user_id": {
+                      "type": "integer",
+                      "description": "The user ID who created the conversation"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The date and time when the conversation was created"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Chat or conversation not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message"
+                },
+                "info": {
+                  "type": "string",
+                  "description": "Detailed error information"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "jwt": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "JWT token to authorize the user. Format: Bearer <token>"
+    }
+  }
+}

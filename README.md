@@ -1,4 +1,4 @@
-# CosmicAI Backend 
+# CosmicAI Backend
 
 This is a Flask application that is configured to run with Gunicorn for production environments. This README provides instructions on how to set up and run the app using Gunicorn, including configuration settings for optimal performance.
 
@@ -54,18 +54,31 @@ gunicorn -c gunicorn.conf.py 'app:create_app()'
 - **`'app:create_app()'`**: This specifies the application factory function `create_app()` inside the `app.py` file to create and run the Flask app.
 
 ---
+
 ## Troubleshooting
 
 ### Common Errors:
 
 1. **Error: `Failed to find attribute 'app' in 'app'`**:
+
    - This usually happens when the `create_app()` function is not correctly referenced in Gunicorn. Ensure you're using the command: `gunicorn -c gunicorn.conf.py 'app:create_app()'`.
 
 2. **Missing Environment Variables**:
+
    - If the `.env` file is missing or misconfigured, the app may fail to load. Make sure all required variables (such as `SQLALCHEMY_DATABASE_URI` and `JWT_SECRET`) are set in `.env`.
 
 3. **Memory Issues**:
    - If your application is consuming too much memory or is slow, you can tweak the `workers` and `timeout` settings in `gunicorn.conf.py` for better performance.
+
+---
+
+## Api Docs
+
+Api docs for app is here in route:
+
+```bash
+/api/docs/
+```
 
 ---
 

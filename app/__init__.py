@@ -9,6 +9,8 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from app.routes import user_bp, conversations_bp, chats_bp
 from app.pre_require import db
+# from flask_restplus import Api
+from flask_swagger_ui import get_swaggerui_blueprint
 
 load_dotenv()
 
@@ -19,7 +21,19 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
+    SWAGGER_URL = '/api/docs'
+    API_URL = '/static/swagger/swagger.json'
+
+    # api = Api(app, version='1.0', title='CosmicAI', description='Swagger UI Documentation')
     print(os.getenv('JWT_SECRET'))
+
+    swagger_ui_blueprint = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URL,
+        config={
+            'app_name': "Flask Swagger UI Example"
+        }
+    )
 
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
@@ -68,8 +82,14 @@ def create_app():
     def properties_details():
         print("Home route accessed")
         return render_template('property-details.html')
+    
+    @app.route('/api/v1/greet')
+    def greet():
+        print("Home route accessed")
+        return jsonify({"message":"Welcome to Cosmic AI"})
 
 
+    app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
     app.register_blueprint(user_bp,url_prefix='/api/v1')
     app.register_blueprint(conversations_bp,url_prefix='/api/v1')
     app.register_blueprint(chats_bp,url_prefix='/api/v1')
