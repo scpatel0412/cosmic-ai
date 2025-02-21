@@ -56,3 +56,17 @@ def get_conversation(id):
 
     except Exception as e:
         return jsonify({"message": "Procedure failed", "info": str(e)}), 500
+
+@conversations_bp.route('/conversations/user/all', methods=['GET'])
+@jwt_required()
+def get_all_converdations():
+    try:
+        user_id = int(get_jwt_identity())
+        print(user_id)
+        
+        conversations = Conversations.query.filter_by(user_id=user_id).all()
+        print(conversations)
+        # return ""
+        return jsonify({"data":[conversation.to_dict() for conversation in conversations]}),200
+    except Exception as e:
+        return jsonify({"message": "Procedure failed", "info": str(e)}), 500

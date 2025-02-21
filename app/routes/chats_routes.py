@@ -77,3 +77,14 @@ def get_chat_with_conversation(chat_id):
         
     except Exception as e:
         return jsonify({"message": "An error occurred", "info": str(e)}), 500
+
+@chats_bp.route('/chats/conversation/all', methods=['POST','GET'])
+@jwt_required()
+def get_conversation_all_chat():
+    try:
+        user_id = get_jwt_identity()
+        req_data = request.get_json()
+        chats = Chats.query.filter_by(conversations_id=req_data["conv_id"]).all()
+        return jsonify({"data":[chat.to_dict() for chat in chats]}), 200
+    except Exception as e:
+        return jsonify({"message": "An error occurred", "info": str(e)}), 500

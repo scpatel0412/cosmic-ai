@@ -14,6 +14,18 @@ class Chats(db.Model):
 
     def __repr__(self):
         return f'<Chats {self.username}>'
+    
+    def to_dict(self):
+        """Convert the Conversation object to a dictionary for JSON serialization."""
+        return {
+            "id": self.id,
+            "questions": self.questions,
+            "answer": self.answer,
+            "conversations_id": self.conversations_id,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "deleted_at": self.deleted_at.isoformat() if self.deleted_at else None,
+        }
 
     def soft_delete(self):
         """Marks the user as deleted by setting the deleted_at timestamp."""
