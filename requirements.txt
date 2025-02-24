@@ -28,3 +28,4 @@ langchain_core~=0.1.53
 bs4~=0.0.2
 geocoder~=1.38.1
 flask-swagger-ui~=4.11.1
+gunicorn~=23.0.0
