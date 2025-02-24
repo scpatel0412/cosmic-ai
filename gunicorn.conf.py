@@ -8,7 +8,7 @@ max_requests_jitter = 50  # Random jitter to spread out restarts
 log_file = "-"
 
 # Bind the server to an IP and port (e.g., 0.0.0.0:5002)
-bind = "0.0.0.0:5000"
+bind = "0.0.0.0:5124"
 
 # Preload the app before forking workers (shared memory for faster worker start-up)
 preload_app = True
