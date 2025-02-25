@@ -29,3 +29,4 @@ bs4~=0.0.2
 geocoder~=1.38.1
 flask-swagger-ui~=4.11.1
 gunicorn~=23.0.0
+stripe~=11.6.0
