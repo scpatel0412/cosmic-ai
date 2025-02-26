@@ -10,10 +10,12 @@ class User(db.Model):
     first_name = db.Column(db.String(500), nullable=False)
     last_name = db.Column(db.String(500), nullable=False)
     contact = db.Column(db.String(500), nullable=False)
+    stripe_customer_id = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     deleted_at = db.Column(db.DateTime, nullable=True)
     conversations = db.relationship('Conversations', backref='users', lazy=True)
+    user_subscriptions = db.relationship('User_Subscriptions')
 
     def __repr__(self):
         return f'<User {self.username}>'

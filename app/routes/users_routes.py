@@ -1,10 +1,14 @@
 from flask import Blueprint, jsonify, request
 from app.model.users import User
+from app.model.user_subscriptions import User_Subscriptions
 from app.pre_require import db
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from flask_bcrypt import generate_password_hash
 from datetime import timedelta
+import stripe
+import os
+stripe.api_key = os.getenv("STRIPE_SECRET_KEYS")
 
 user_bp = Blueprint('user_bp', __name__)
 bcrypt = Bcrypt()
@@ -113,7 +117,11 @@ def register():
         return jsonify({"message":"User already exists"}),400
     
     hash_password = generate_password_hash(password).decode("utf-8")
-    new_user = User(username=username,email=email,password=hash_password,first_name=first_name,last_name=last_name,contact=contact)
+    customer_id = stripe.Customer.create(
+                    name=first_name,
+                    email=email,
+                  )
+    new_user = User(username=username,email=email,password=hash_password,first_name=first_name,last_name=last_name,contact=contact,stripe_customer_id=customer_id.id)
 
     try:
         db.session.add(new_user)
@@ -124,19 +132,31 @@ def register():
         return jsonify({"message":"Procedure failed","info":str(e)}), 500
 
 
-@user_bp.route('/users/me',methods=['POST'])
+@user_bp.route('/users/me', methods=['POST'])
 @jwt_required()
 def me_details():
     user_id = get_jwt_identity()
     
     user_data = User.query.filter_by(id=user_id).first()
 
-    if user_data:
-        user_info = {
-            "id": user_data.id,
-            "username": user_data.username,
-            "email": user_data.email
-        }
-        return jsonify(user_info), 200
-    else:
-        return jsonify({"message":"User not found"}), 404
+    if not user_data:
+        return jsonify({"message": "User not found"}), 404
+
+    # Retrieve customer details from Stripe
+    customer_det = stripe.Customer.retrieve(user_data.stripe_customer_id)
+
+    # Retrieve active subscriptions from your database
+    user_subscriptions = User_Subscriptions.query_active(User_Subscriptions.user_id == user_id).all()
+    subscription_info = [sub.to_dict() for sub in user_subscriptions]
+
+    # Build the response
+    user_info = {
+        "id": user_data.id,
+        "username": user_data.username,
+        "email": user_data.email,
+        "stripe_customer_id": user_data.stripe_customer_id,
+        "customer_stripe_details": customer_det,
+        "subscriptions": subscription_info
+    }
+
+    return jsonify(user_info), 200

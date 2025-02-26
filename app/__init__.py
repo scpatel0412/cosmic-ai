@@ -7,7 +7,7 @@ import os
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from app.routes import user_bp, conversations_bp, chats_bp, stripe_bp
+from app.routes import user_bp, conversations_bp, chats_bp, stripe_bp, user_sub_bp
 from app.pre_require import db
 # from flask_restplus import Api
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -94,5 +94,6 @@ def create_app():
     app.register_blueprint(conversations_bp,url_prefix='/api/v1')
     app.register_blueprint(chats_bp,url_prefix='/api/v1')
     app.register_blueprint(stripe_bp,url_prefix='/api/v1')
+    app.register_blueprint(user_sub_bp,url_prefix='/api/v1')
 
     return app
